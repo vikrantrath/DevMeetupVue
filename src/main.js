@@ -6,10 +6,17 @@ import * as firebase from 'firebase'
 import router from './router'
 import { store } from './store'
 import appEditMeetupDialogue from './components/Meetup/Edit/EditMeetupDetailsDialogue'
+import appEditMeetupDateDialogue from './components/Meetup/Edit/EditMeetupDateDialogue'
+import appEditMeetupTimeDialogue from './components/Meetup/Edit/EditMeetupTimeDialogue'
+import appRegisterDialogue from './components/Meetup/Registration/RegisterDialog'
 
 Vue.config.productionTip = true
 Vue.component('app-alert', AlertComp)
 Vue.component('app-edit-meetup-dialog', appEditMeetupDialogue)
+Vue.component('app-edit-meetup-date-dialog', appEditMeetupDateDialogue)
+Vue.component('app-edit-meetup-time-dialog', appEditMeetupTimeDialogue)
+Vue.component('app-register-dialog', appRegisterDialogue)
+
 new Vue({
   router,
   store,

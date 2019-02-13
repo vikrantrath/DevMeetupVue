@@ -1,5 +1,5 @@
 <template>
-    <v-dialog width=350px persistent >
+    <v-dialog width=350px persistent v-model= "editDialog">
         <v-btn fab accent slot="activator">
             <v-icon>edit</v-icon>
         </v-btn>
@@ -17,12 +17,12 @@
                     <v-flex xs12>
                         <v-card-text>
                             <v-text-field
-                                v-model="title"
+                                v-model="editedTitle"
                                 label="Title"
                                 required
                             ></v-text-field>
                             <v-textarea
-                            v-model="description"
+                            v-model="editedDescription"
                             label="Description"
                             required
                             ></v-textarea>
@@ -51,8 +51,23 @@ export default {
   props: ['meetup'],
   data () {
     return {
+      editDialog: false,
       editedTitle: this.meetup.title,
-      editedDescription: ''
+      editedDescription: this.meetup.description
+    }
+  },
+  methods: {
+    onCancel () {
+      this.editDialog = false
+    },
+    onSave () {
+      const newMeetup = {
+        id: this.meetup.id,
+        title: this.editedTitle,
+        description: this.editedDescription
+      }
+      this.$store.dispatch('updateMeetup', newMeetup)
+      this.editDialog = false
     }
   }
 }

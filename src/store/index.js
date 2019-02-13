@@ -48,6 +48,19 @@ export const store = new Vuex.Store({
     },
     setLoadingStatus (state, payload) {
       state.loading = payload
+    },
+    updateMeetup (state, payload) {
+      const meetup = state.loadedMeetups.find(meetup => {
+        return meetup.id === payload.id
+      })
+      meetup.title = payload.title
+      meetup.description = payload.description
+    },
+    updateMeetupDate (state, payload) {
+      const meetup = state.loadedMeetups.find(meetup => {
+        return meetup.id === payload.id
+      })
+      meetup.date = payload.date
     }
   },
   actions: {
@@ -76,7 +89,7 @@ export const store = new Vuex.Store({
           console.log(error)
         })
     },
-    async createMeetup ({ commit, getters }, payload) {
+    createMeetup ({ commit, getters }, payload) {
       const meetup = {
         // id: Math.floor(Math.random() * 888888) + '',
         title: payload.title,
@@ -179,6 +192,30 @@ export const store = new Vuex.Store({
     },
     clearError ({ commit }) {
       commit('setErrorStatus', null)
+    },
+    updateMeetup ({ commit }, payload) {
+      commit('setLoadingStatus', true)
+      firebase.database().ref('meetups').child(payload.id).update({ title: payload.title, description: payload.description })
+        .then(success => {
+          commit('updateMeetup', payload)
+          commit('setLoadingStatus', false)
+        })
+        .catch(err => {
+          console.log(err)
+          commit('setLoadingStatus', false)
+        })
+    },
+    updateMeetupDate ({ commit }, payload) {
+      commit('setLoadingStatus', true)
+      firebase.database().ref('meetups').child(payload.id).update({ date: payload.date })
+        .then(success => {
+          commit('updateMeetupDate', payload)
+          commit('setLoadingStatus', false)
+        })
+        .catch(err => {
+          console.log(err)
+          commit('setLoadingStatus', false)
+        })
     }
   },
   getters: {
